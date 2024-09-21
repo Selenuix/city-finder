@@ -55,7 +55,7 @@ export const CityFinder = ({ apiKey }: CityFinderProps) => {
 
   const handleSubmit = async () => {
     try {
-      const bestCity = await findBestMeetingCity(cities, apiKey);
+      const bestCity = await findBestMeetingCity(cities);
       setBestCity(bestCity);
     } catch (err) {
       console.log(err);

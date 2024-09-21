@@ -3,6 +3,7 @@ import { z } from "astro:schema";
 import { getCoordinates } from "@/utils/getCoordinates";
 import { getNearbyCities } from "@/utils/getNearbyCities.ts";
 import { getTravelTime } from "@/utils/getTravelTime.ts";
+import type { City } from "@/models/City.ts";
 
 export const server = {
   getCoordinates: defineAction({
@@ -51,7 +52,7 @@ export const server = {
     }),
     handler: async ({ origin, destination }) => {
       try {
-        return await getTravelTime({ origin, destination });
+        return await getTravelTime(origin, destination);
       } catch (error) {
         if (error instanceof Error) {
           console.error("Error in action 'getTravelTime':", error);

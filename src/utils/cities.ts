@@ -1,5 +1,4 @@
 import type { City } from "../models/City.ts";
-import axios from "axios";
 import { actions } from "astro:actions";
 
 // Helper function to get nearby cities based on geographical midpoint using Google Places API
@@ -81,7 +80,6 @@ async function getTravelTime(
 // Find the best meeting city from a dynamically generated list of cities near the geographical midpoint
 export async function findBestMeetingCity(
   cities: City[],
-  apiKey: string,
 ): Promise<City | null> {
   if (cities.length < 2) return null;
 
@@ -94,8 +92,8 @@ export async function findBestMeetingCity(
     longitude: midpoint.longitude,
   });
 
-  if (nearbyCities.length === 0) {
-    console.log("No nearby cities found.");
+  if (nearbyCities.data.length === 0) {
+    console.error("No nearby cities found.");
     return null;
   }
 
@@ -108,8 +106,11 @@ export async function findBestMeetingCity(
 
     // Sum the travel time from each origin city to the destination city
     for (const origin of cities) {
-      const travelTime = await actions.getTravelTime(origin, destination);
-      totalTravelTime += travelTime;
+      const travelTime = await actions.getTravelTime({ origin, destination });
+
+      if (travelTime.data) {
+        totalTravelTime += travelTime.data;
+      }
     }
 
     // Find the city with the shortest total travel time

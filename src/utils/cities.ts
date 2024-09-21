@@ -57,6 +57,7 @@ function calculateGeographicalMidpoint(cities: City[]): {
 }
 
 // Function to get travel time between two cities using Google Distance Matrix API
+/*
 async function getTravelTime(
   origin: City,
   destination: City,
@@ -75,6 +76,7 @@ async function getTravelTime(
     return Infinity; // In case of an error, return infinitely large travel time
   }
 }
+*/
 
 // Find the best meeting city from a dynamically generated list of cities near the geographical midpoint
 export async function findBestMeetingCity(
@@ -91,12 +93,6 @@ export async function findBestMeetingCity(
     latitude: midpoint.latitude,
     longitude: midpoint.longitude,
   });
-  console.log(nearbyCities);
-  /*const nearbyCities = await getNearbyCities(
-    midpoint.latitude,
-    midpoint.longitude,
-    apiKey,
-  );*/
 
   if (nearbyCities.length === 0) {
     console.log("No nearby cities found.");
@@ -107,12 +103,12 @@ export async function findBestMeetingCity(
   let shortestTotalTravelTime = Infinity;
 
   // Step 3: Calculate travel times to each nearby city
-  for (const destination of nearbyCities) {
+  for (const destination of nearbyCities.data) {
     let totalTravelTime = 0;
 
     // Sum the travel time from each origin city to the destination city
     for (const origin of cities) {
-      const travelTime = await getTravelTime(origin, destination, apiKey);
+      const travelTime = await actions.getTravelTime(origin, destination);
       totalTravelTime += travelTime;
     }
 

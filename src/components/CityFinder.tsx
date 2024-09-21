@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { actions } from "astro:actions";
 
-import { Input } from "@/components/ui/input";
+import type { City } from "../models/City";
+import { findBestMeetingCity } from "../utils/cities";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/alert";
-
-import type { City } from "../models/City";
-import { findBestMeetingCity } from "../utils/cities";
+import { CityForm } from "@/components/forms/CityForm.tsx";
 
 interface CityFinderProps {
   apiKey: string;
@@ -44,11 +43,11 @@ export const CityFinder = ({ apiKey }: CityFinderProps) => {
   };
 
   const handleSubmit = async () => {
-    console.log(cities);
     try {
       const bestCity = await findBestMeetingCity(cities, apiKey);
       setBestCity(bestCity);
     } catch (err) {
+      console.log(err);
       setError("Failed to find the best city. Please try again.");
     }
   };
@@ -57,15 +56,22 @@ export const CityFinder = ({ apiKey }: CityFinderProps) => {
     <div className="max-w-xl mx-auto p-4 bg-white rounded-lg shadow-md mt-10">
       <h1 className="text-2xl font-bold text-center mb-4">City Finder</h1>
       <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
-        <Input
+        <CityForm handleAddCity={handleAddCity} />
+
+        {/* <Input
           className="flex-grow mr-2"
           value={cityInput}
           onInput={(e) => setCityInput((e.target as HTMLInputElement).value)}
           placeholder="Enter a city name"
+          autoFocus={true}
         />
-        <Button className="flex-shrink-0" onClick={handleAddCity}>
+        <Button
+          className="flex-shrink-0"
+          onSubmit={handleAddCity}
+          type="submit"
+        >
           Add City
-        </Button>
+        </Button>*/}
       </div>
 
       <div className="flex flex-wrap mb-4">

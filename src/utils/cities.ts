@@ -1,8 +1,9 @@
-// Helper function to get nearby cities based on geographical midpoint using Google Places API
 import type { City } from "../models/City.ts";
 import axios from "axios";
+import { actions } from "astro:actions";
 
-async function getNearbyCities(
+// Helper function to get nearby cities based on geographical midpoint using Google Places API
+/*async function getNearbyCities(
   latitude: number,
   longitude: number,
   apiKey: string,
@@ -19,7 +20,7 @@ async function getNearbyCities(
     console.error("Error fetching nearby cities:", error);
     return [];
   }
-}
+}*/
 
 // Function to calculate the geographical midpoint of a list of cities
 function calculateGeographicalMidpoint(cities: City[]): {
@@ -71,7 +72,7 @@ async function getTravelTime(
       `Error fetching travel time from ${origin.name} to ${destination.name}:`,
       error,
     );
-    return Infinity; // In case of an error, return an infinitely large travel time
+    return Infinity; // In case of an error, return infinitely large travel time
   }
 }
 
@@ -86,11 +87,16 @@ export async function findBestMeetingCity(
   const midpoint = calculateGeographicalMidpoint(cities);
 
   // Step 2: Get nearby cities around the midpoint
-  const nearbyCities = await getNearbyCities(
+  const nearbyCities = await actions.getNearbyCities({
+    latitude: midpoint.latitude,
+    longitude: midpoint.longitude,
+  });
+  console.log(nearbyCities);
+  /*const nearbyCities = await getNearbyCities(
     midpoint.latitude,
     midpoint.longitude,
     apiKey,
-  );
+  );*/
 
   if (nearbyCities.length === 0) {
     console.log("No nearby cities found.");

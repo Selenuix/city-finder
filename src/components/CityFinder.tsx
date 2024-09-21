@@ -6,7 +6,7 @@ import type { City } from "../models/City";
 import { findBestMeetingCity } from "../utils/cities";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Alert } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Form,
   FormControl,
@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import { CheckCircle, X, XCircle } from "lucide-react";
 
 interface CityFinderProps {
   apiKey: string;
@@ -49,6 +50,10 @@ export const CityFinder = ({ apiKey }: CityFinderProps) => {
     }
   };
 
+  const handleRemoveCity = (index: number) => {
+    setCities(cities.filter((_, i) => i !== index));
+  };
+
   const handleResetCities = () => {
     setCities([]);
   };
@@ -64,8 +69,9 @@ export const CityFinder = ({ apiKey }: CityFinderProps) => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-4 bg-white rounded-lg shadow-md mt-10">
-      <h1 className="text-2xl font-bold text-center mb-4">City Finder</h1>
+    <div className="flex flex-col items-center min-h-screen py-8 bg-gray-100">
+      <h1 className="text-3xl font-bold mb-6">Find the Best Meeting City</h1>
+
       <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
         <Form {...form}>
           <form
@@ -96,50 +102,63 @@ export const CityFinder = ({ apiKey }: CityFinderProps) => {
             <Button type="submit">Submit</Button>
           </form>
         </Form>
-
-        {/* <Input
-          className="flex-grow mr-2"
-          value={cityInput}
-          onInput={(e) => setCityInput((e.target as HTMLInputElement).value)}
-          placeholder="Enter a city name"
-          autoFocus={true}
-        />
-        <Button
-          className="flex-shrink-0"
-          onSubmit={handleAddCity}
-          type="submit"
-        >
-          Add City
-        </Button>*/}
       </div>
 
-      <div className="flex flex-wrap mb-4">
-        {cities.map((city, index) => (
-          <Badge key={index} className="mr-2 mb-2">
-            {city.name}
-          </Badge>
-        ))}
+      <div className={"flex flex-wrap gap-2"}>
+        {cities.length > 0 ? (
+          cities.map((city, index) => (
+            <Badge key={index} className={"flex items-center gap-2 p-2"}>
+              {city.name}
+              <Button
+                onClick={() => handleRemoveCity(index)}
+                className={"ml-2"}
+              >
+                <X className={"w-4 h-4"} />
+              </Button>
+            </Badge>
+          ))
+        ) : (
+          <p className={"text-gray-600"}>
+            No cities added yet. Start by adding a city.
+          </p>
+        )}
       </div>
 
-      <Button
-        onClick={handleSubmit}
-        className="w-full mt-4 bg-blue-600 text-white hover:bg-blue-700"
-      >
+      <Button className={"mt-6"} variant="default" onClick={handleSubmit}>
         Find Best City
       </Button>
       <Button
+        className={"mt-6"}
+        variant="destructive"
         onClick={handleResetCities}
-        className="w-full mt-4 bg-orange-600 text-white hover:bg-orange-700"
       >
         Reset
       </Button>
 
       {bestCity && (
-        <Alert className="mt-4">
-          Your best meeting city is: {bestCity.name}
+        <Alert variant="default" className={"mt-4 flex items-center gap-2"}>
+          <CheckCircle className={"w-6 h-6 text-green-500"} />
+          <div>
+            <AlertTitle className={"font-bold"}>
+              Best Meeting City Found!
+            </AlertTitle>
+            <AlertDescription>
+              Your best meeting city is:{" "}
+              <span className={"font-bold"}> {bestCity.name}</span>
+            </AlertDescription>
+          </div>
         </Alert>
       )}
-      {error && <Alert className="mt-4 text-red-500">{error}</Alert>}
+
+      {error && (
+        <Alert variant="destructive" className={"mt-4 flex items-center gap-2"}>
+          <XCircle className={"w-6 h-6 text-red-500"} />
+          <div>
+            <AlertTitle className={"font-bold"}>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </div>
+        </Alert>
+      )}
     </div>
   );
 };

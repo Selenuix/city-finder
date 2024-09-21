@@ -54,30 +54,47 @@ export const CityFinder = ({ apiKey }: CityFinderProps) => {
   };
 
   return (
-    <div>
-      <h1>City Finder</h1>
-      <Input
-        value={cityInput}
-        onInput={(e) => setCityInput((e.target as HTMLInputElement).value)}
-        placeholder="Enter a city"
-      />
-      <Button onClick={handleAddCity}>Add City</Button>
-      <Button onClick={handleResetCities}>Reset</Button>
+    <div className="max-w-xl mx-auto p-4 bg-white rounded-lg shadow-md mt-10">
+      <h1 className="text-2xl font-bold text-center mb-4">City Finder</h1>
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
+        <Input
+          className="flex-grow mr-2"
+          value={cityInput}
+          onInput={(e) => setCityInput((e.target as HTMLInputElement).value)}
+          placeholder="Enter a city name"
+        />
+        <Button className="flex-shrink-0" onClick={handleAddCity}>
+          Add City
+        </Button>
+      </div>
 
-      <div style={{ marginTop: "10px" }}>
+      <div className="flex flex-wrap mb-4">
         {cities.map((city, index) => (
-          <Badge key={index} style={{ marginRight: "5px" }}>
+          <Badge key={index} className="mr-2 mb-2">
             {city.name}
           </Badge>
         ))}
       </div>
 
-      <Button onClick={handleSubmit} style={{ marginTop: "10px" }}>
+      <Button
+        onClick={handleSubmit}
+        className="w-full mt-4 bg-blue-600 text-white hover:bg-blue-700"
+      >
         Find Best City
       </Button>
+      <Button
+        onClick={handleResetCities}
+        className="w-full mt-4 bg-orange-600 text-white hover:bg-orange-700"
+      >
+        Reset
+      </Button>
 
-      {bestCity && <Alert>Your best meeting city is: {bestCity.name}</Alert>}
-      {error && <Alert>{error}</Alert>}
+      {bestCity && (
+        <Alert className="mt-4">
+          Your best meeting city is: {bestCity.name}
+        </Alert>
+      )}
+      {error && <Alert className="mt-4 text-red-500">{error}</Alert>}
     </div>
   );
 };

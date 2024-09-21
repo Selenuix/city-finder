@@ -12,6 +12,7 @@ export const server = {
         return await getCoordinates({ name });
       } catch (error) {
         if (error instanceof Error) {
+          console.error(error);
           throw new Error(`Error fetching coordinates: ${error.message}`);
         }
       }

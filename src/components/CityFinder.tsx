@@ -19,11 +19,7 @@ import {
 import { Input } from "@/components/ui/input.tsx";
 import { CheckCircle, X, XCircle } from "lucide-react";
 
-interface CityFinderProps {
-  apiKey: string;
-}
-
-export const CityFinder = ({ apiKey }: CityFinderProps) => {
+export const CityFinder = () => {
   const [cities, setCities] = useState<City[]>([]);
   const [cityInput, setCityInput] = useState<string>("");
   const [bestCity, setBestCity] = useState<City | null>(null);
@@ -56,6 +52,7 @@ export const CityFinder = ({ apiKey }: CityFinderProps) => {
 
   const handleResetCities = () => {
     setCities([]);
+    setBestCity(null);
   };
 
   const handleSubmit = async () => {
@@ -81,7 +78,7 @@ export const CityFinder = ({ apiKey }: CityFinderProps) => {
             <FormField
               control={form.control}
               name="city"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>City</FormLabel>
                   <FormControl>
@@ -99,7 +96,7 @@ export const CityFinder = ({ apiKey }: CityFinderProps) => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Add</Button>
           </form>
         </Form>
       </div>

@@ -1,12 +1,11 @@
 ---
 import '@/styles/globals.css'
-import {GOOGLE_MAPS_API_KEY} from "astro:env/server";
 import Layout from "../layouts/Layout.astro";
 import {CityFinder} from "../components/CityFinder";
 ---
 
 <Layout title="Home">
     <main>
-        <CityFinder apiKey={GOOGLE_MAPS_API_KEY} client:load/>
+        <CityFinder client:load/>
     </main>
 </Layout>
